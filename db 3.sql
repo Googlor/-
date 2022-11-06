@@ -1,0 +1,5 @@
+SELECT t1.ID, t1.FIO, t1.SEX FROM tabl1 AS t1
+JOIN tabl2 AS t2 ON t1.ID = t2.ID_child
+GROUP BY t1.ID 
+HAVING COUNT(ID) < 2
+
