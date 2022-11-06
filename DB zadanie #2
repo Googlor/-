@@ -1,0 +1,38 @@
+(Таблица 1 = tabl1, ID = ID, ФИО = FIO,
+Таблица 2 = tabl2, ID_родителя = id_parent, ID_ребенка = id_child)
+
+1. На основании приведённых данных определите ID родного брата Седых В.А. 
+Запрос:
+SELECT a.ID_child, b.id_parent, c.ID_parent, d.sex FROM tabl2 a
+LEFT JOIN tabl2 AS b ON (a.ID_child = b.ID_child) 
+LEFT JOIN tabl2 AS c ON (b.ID_child = c.ID_child)
+LEFT JOIN tabl1 AS d ON (a.ID_child = d.ID) WHERE b.ID_parent = 1616 AND c.id_parent = 2349 AND sex ='m'
+GROUP BY a.ID_child
+
+Результат:
+ID родного брата Седых В.А = 2593
+
+2.Сколько братьев у Саенко М.А.
+Запрос:
+SELECT COUNT(r1.id_child) AS bro FROM (SELECT a.ID_child FROM tabl2 a
+LEFT JOIN tabl2 AS b ON (a.ID_child = b.ID_child) 
+LEFT JOIN tabl2 AS c ON (b.ID_child = c.ID_child)
+LEFT JOIN tabl1 AS d ON (a.ID_child = d.ID) WHERE b.ID_parent = 1616 AND c.id_parent = 2349 AND sex ='m'
+GROUP BY a.id_child) r1
+
+Результат:
+1
+
+3.Вывести список детей из неполных семей.
+
+SELECT t1.ID, t1.FIO, t1.SEX FROM tabl1 AS t1
+JOIN tabl2 AS t2 ON t1.ID = t2.ID_child
+GROUP BY t1.ID 
+HAVING COUNT(ID) < 2
+
+Результат:
+1974 Тузенбах П.А.	Ж
+2339 Седых Л.А. М
+
+
+
